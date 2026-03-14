@@ -10,16 +10,16 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black: #080a0f;
-  --dark: #0e1118;
-  --card: #13161f;
+  --black: #080a08;
+  --dark: #0e1008;
+  --card: #131508;
   --border: rgba(255,255,255,0.07);
-  --white: #f0f2f8;
-  --muted: rgba(240,242,248,0.45);
-  --neon: #00f5c4;
-  --neon2: #7b5cff;
-  --orange: #ff6b2b;
-  --yellow: #ffd94a;
+  --white: #f5f5f0;
+  --muted: rgba(245,245,240,0.45);
+  --neon: #b4f542;      /* PIXEL lime green */
+  --neon2: #f4855a;     /* PULSE coral orange */
+  --orange: #f4855a;    /* coral */
+  --yellow: #f5d800;    /* PLAY N PARTY yellow */
 }
 
 html { scroll-behavior: smooth; }
@@ -111,8 +111,8 @@ nav {
 /* Neon tint layer */
 .hero-video-tint {
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,245,196,0.06), transparent 70%),
-              radial-gradient(ellipse 60% 60% at 20% 80%, rgba(123,92,255,0.08), transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(180,245,66,0.06), transparent 70%),
+              radial-gradient(ellipse 60% 60% at 20% 80%, rgba(244,133,90,0.08), transparent 70%);
   z-index: 2;
 }
 
@@ -121,8 +121,8 @@ nav {
   position: absolute; inset: 0;
   z-index: 3;
   background-image:
-    linear-gradient(rgba(0,245,196,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,245,196,0.035) 1px, transparent 1px);
+    linear-gradient(rgba(180,245,66,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180,245,66,0.035) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
 }
@@ -140,9 +140,9 @@ nav {
   pointer-events: none;
   z-index: 4;
 }
-.glow-1 { width: 600px; height: 600px; background: rgba(123,92,255,0.14); top: -100px; right: -100px; }
-.glow-2 { width: 400px; height: 400px; background: rgba(0,245,196,0.09); bottom: 0; left: 100px; }
-.glow-3 { width: 300px; height: 300px; background: rgba(255,107,43,0.08); top: 200px; left: 50%; }
+.glow-1 { width: 600px; height: 600px; background: rgba(244,133,90,0.15); top: -100px; right: -100px; }
+.glow-2 { width: 400px; height: 400px; background: rgba(180,245,66,0.1); bottom: 0; left: 100px; }
+.glow-3 { width: 300px; height: 300px; background: rgba(245,216,0,0.08); top: 200px; left: 50%; }
 
 /* Video mute button */
 .video-mute-btn {
@@ -191,8 +191,8 @@ h1 {
   animation: fadeUp 0.8s ease 0.25s forwards;
 }
 
-h1 .accent { color:#a4cf5f; }
-h1 .accent2 { color: var(--orange); }
+h1 .accent { color: var(--neon); }
+h1 .accent2 { color: var(--neon2); }
 
 .hero-sub {
   font-size: 17px;
@@ -611,8 +611,8 @@ h2 {
 }
 
 .cta-inner {
-  background: linear-gradient(135deg, rgba(0,245,196,0.08), rgba(123,92,255,0.08));
-  border: 1px solid rgba(0,245,196,0.2);
+  background: linear-gradient(135deg, rgba(180,245,66,0.08), rgba(244,133,90,0.08));
+  border: 1px solid rgba(180,245,66,0.2);
   border-radius: 24px;
   padding: 72px 64px;
   text-align: center;
@@ -624,8 +624,8 @@ h2 {
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 40% 60% at 20% 50%, rgba(0,245,196,0.07), transparent),
-    radial-gradient(ellipse 40% 60% at 80% 50%, rgba(123,92,255,0.07), transparent);
+    radial-gradient(ellipse 40% 60% at 20% 50%, rgba(180,245,66,0.07), transparent),
+    radial-gradient(ellipse 40% 60% at 80% 50%, rgba(244,133,90,0.07), transparent);
 }
 
 .cta-inner > * { position: relative; }
@@ -761,7 +761,9 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">PIXEL<span>PULSE</span></a>
+  <a class="nav-logo" href="#">
+    <img src="https://www.pixelpulseplay.ca/_next/static/media/logoD.81b24b2c.png" alt="Pixel Pulse Play" style="height:36px;width:auto;display:block;">
+  </a>
   <ul class="nav-links">
     <li><a href="#attractions">Attractions</a></li>
     <li><a href="#events">Events</a></li>
@@ -1198,7 +1200,7 @@ footer {
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <div class="nav-logo">PIXEL<span style="color:var(--neon)">PULSE</span></div>
+      <img src="https://www.pixelpulseplay.ca/_next/static/media/logoD.81b24b2c.png" alt="Pixel Pulse Play" style="height:40px;width:auto;display:block;margin-bottom:4px;">
       <p>Vaughan's next-generation indoor gaming arena. Where physical meets digital for kids, teens, and groups across the GTA.</p>
     </div>
     <div>
