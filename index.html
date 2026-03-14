@@ -83,13 +83,54 @@ nav {
   overflow: hidden;
 }
 
+/* Video background */
+.hero-video-wrap {
+  position: absolute; inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero-video-wrap video {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%; min-height: 100%;
+  width: auto; height: auto;
+  object-fit: cover;
+}
+/* Dark overlay so text stays readable */
+.hero-video-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,10,15,0.65) 0%,
+    rgba(8,10,15,0.55) 50%,
+    rgba(8,10,15,0.85) 100%
+  );
+  z-index: 1;
+}
+/* Neon tint layer */
+.hero-video-tint {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,245,196,0.06), transparent 70%),
+              radial-gradient(ellipse 60% 60% at 20% 80%, rgba(123,92,255,0.08), transparent 70%);
+  z-index: 2;
+}
+
+/* Grid overlay on top of video */
 .hero-grid-bg {
   position: absolute; inset: 0;
+  z-index: 3;
   background-image:
-    linear-gradient(rgba(0,245,196,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,245,196,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0,245,196,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,196,0.035) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* All hero content sits above video layers */
+#hero > *:not(.hero-video-wrap):not(.hero-grid-bg):not(.hero-glow) {
+  position: relative;
+  z-index: 10;
 }
 
 .hero-glow {
@@ -97,10 +138,29 @@ nav {
   border-radius: 50%;
   filter: blur(120px);
   pointer-events: none;
+  z-index: 4;
 }
-.glow-1 { width: 600px; height: 600px; background: rgba(123,92,255,0.18); top: -100px; right: -100px; }
-.glow-2 { width: 400px; height: 400px; background: rgba(0,245,196,0.12); bottom: 0; left: 100px; }
-.glow-3 { width: 300px; height: 300px; background: rgba(255,107,43,0.1); top: 200px; left: 50%; }
+.glow-1 { width: 600px; height: 600px; background: rgba(123,92,255,0.14); top: -100px; right: -100px; }
+.glow-2 { width: 400px; height: 400px; background: rgba(0,245,196,0.09); bottom: 0; left: 100px; }
+.glow-3 { width: 300px; height: 300px; background: rgba(255,107,43,0.08); top: 200px; left: 50%; }
+
+/* Video mute button */
+.video-mute-btn {
+  position: absolute;
+  bottom: 36px; right: 48px;
+  z-index: 20;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--white);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, border-color 0.2s;
+}
+.video-mute-btn:hover { background: rgba(0,245,196,0.15); border-color: var(--neon); }
 
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
@@ -621,6 +681,41 @@ footer {
 }
 .social-btn:hover { border-color: var(--neon); color: var(--neon); }
 
+/* ─── BLOG CARDS ─── */
+.blog-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+  display: flex; flex-direction: column;
+}
+.blog-card:hover { transform: translateY(-5px); border-color: rgba(0,245,196,0.3); }
+.blog-card:hover .blog-read { color: var(--neon); }
+
+.blog-img-wrap {
+  height: 180px;
+  overflow: hidden;
+}
+.blog-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.blog-card:hover .blog-img-wrap img { transform: scale(1.05); }
+
+.blog-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.blog-date { font-size: 11px; color: var(--neon); font-weight: 600; letter-spacing: 0.08em; }
+.blog-title { font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--white); flex: 1; }
+.blog-read { font-size: 12px; color: var(--muted); font-weight: 600; transition: color 0.2s; margin-top: 4px; }
+
+@media (max-width: 900px) {
+  #blog > div:last-child { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 600px) {
+  #blog > div:last-child { grid-template-columns: 1fr !important; }
+}
+
 /* ─── ANIMATIONS ─── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -678,10 +773,29 @@ footer {
 
 <!-- HERO -->
 <section id="hero">
+
+  <!-- ✅ VIDEO BACKGROUND — replace src with your actual video file or URL -->
+  <div class="hero-video-wrap">
+    <video
+      id="heroVideo"
+      src="https://storage.googleapis.com/pixel-pulse-play/web/Pixel%20Pulse%20Intro%20Video.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    ></video>
+    <div class="hero-video-overlay"></div>
+    <div class="hero-video-tint"></div>
+  </div>
+
   <div class="hero-grid-bg"></div>
   <div class="hero-glow glow-1"></div>
   <div class="hero-glow glow-2"></div>
   <div class="hero-glow glow-3"></div>
+
+  <!-- Mute/Unmute toggle -->
+  <button class="video-mute-btn" id="muteBtn" title="Toggle sound">🔇</button>
 
   <div class="hero-badge"><span class="badge-dot"></span> Vaughan's #1 Indoor Gaming Arena</div>
 
@@ -722,8 +836,9 @@ footer {
 
   <div class="attractions-grid">
     <div class="attraction-card reveal">
-      <div class="attr-img-wrap attr-bg-1">
-        <div class="attr-bg-inner"><img alt="Enjoy the exciting Hexaquest experience at PixelPulsePlay vaughan" loading="lazy" width="330" height="200" decoding="async" data-nimg="1" style="color:transparent" src="https://storage.googleapis.com/pixel-pulse-play/web/laser-maze-with-human.png"></div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/laser-maze-with-human.png" alt="Laser Maze">
+        <div class="attr-overlay"></div>
       </div>
       <span class="attr-tag">Fan Fave</span>
       <div class="attr-body">
@@ -732,8 +847,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal reveal-delay-1">
-      <div class="attr-img-wrap attr-bg-2">
-        <div class="attr-bg-inner">🟢</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/aerosports/st-catharines-new/hexa-quest-new.jpg" alt="Hexa Quest">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Hexa Quest</div>
@@ -741,8 +857,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal reveal-delay-2">
-      <div class="attr-img-wrap attr-bg-3">
-        <div class="attr-bg-inner">🧗</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/3H-EdgeClimb.png" alt="Edge Climb">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Edge Climb</div>
@@ -750,8 +867,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal reveal-delay-3">
-      <div class="attr-img-wrap attr-bg-4">
-        <div class="attr-bg-inner">🎯</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/4H-shootingGame.jpg" alt="Shoot It Out">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Shoot It Out</div>
@@ -759,8 +877,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal">
-      <div class="attr-img-wrap attr-bg-5">
-        <div class="attr-bg-inner">💡</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/Tile-Hunt.png" alt="Tile Hunt">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Tile Hunt</div>
@@ -768,8 +887,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal reveal-delay-1">
-      <div class="attr-img-wrap attr-bg-6">
-        <div class="attr-bg-inner">🏀</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/basketballgame.jpg" alt="Basket Ball">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Basket Ball</div>
@@ -777,8 +897,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal reveal-delay-2">
-      <div class="attr-img-wrap attr-bg-7">
-        <div class="attr-bg-inner">🌀</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/MazeGate.png" alt="Maze Gate">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Maze Gate</div>
@@ -786,8 +907,9 @@ footer {
       </div>
     </div>
     <div class="attraction-card reveal reveal-delay-3">
-      <div class="attr-img-wrap attr-bg-8">
-        <div class="attr-bg-inner">⚽</div>
+      <div class="attr-img-wrap">
+        <img class="attr-img" src="https://storage.googleapis.com/pixel-pulse-play/web/socer-vertical.png" alt="Soccer Challenge">
+        <div class="attr-overlay"></div>
       </div>
       <div class="attr-body">
         <div class="attr-name">Soccer Challenge</div>
@@ -805,7 +927,8 @@ footer {
 
   <div class="events-grid">
     <div class="event-card reveal">
-      <div class="event-bg event-bg-birthday"></div>
+      <div class="event-bg" style="background: url('https://storage.googleapis.com/aerosports/windsor-new/kids-activity-glow-in-the-dark.webp') center/cover no-repeat;"></div>
+      <div class="event-bg" style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(80,20,120,0.45) 100%);"></div>
       <div class="event-icon">🎂</div>
       <div class="event-content">
         <div class="event-tag">Most Popular</div>
@@ -815,7 +938,8 @@ footer {
       </div>
     </div>
     <div class="event-card reveal reveal-delay-1">
-      <div class="event-bg event-bg-corporate"></div>
+      <div class="event-bg" style="background: url('https://storage.googleapis.com/pixel-pulse-play/web/laser-maze-with-human.png') center/cover no-repeat;"></div>
+      <div class="event-bg" style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,60,40,0.5) 100%);"></div>
       <div class="event-icon">💼</div>
       <div class="event-content">
         <div class="event-tag">Team Building</div>
@@ -825,7 +949,8 @@ footer {
       </div>
     </div>
     <div class="event-card reveal reveal-delay-2">
-      <div class="event-bg event-bg-field"></div>
+      <div class="event-bg" style="background: url('https://storage.googleapis.com/aerosports/st-catharines-new/hexa-quest-new.jpg') center/cover no-repeat;"></div>
+      <div class="event-bg" style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(120,50,0,0.45) 100%);"></div>
       <div class="event-icon">🎒</div>
       <div class="event-content">
         <div class="event-tag">Groups 20+</div>
@@ -841,8 +966,9 @@ footer {
 <section id="why">
   <div class="why-layout">
     <div class="why-visual reveal">
-      <div class="why-screen">🎮
-        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(0,245,196,0.08), transparent 70%);"></div>
+      <div class="why-screen" style="font-size:0;">
+        <img src="https://storage.googleapis.com/pixel-pulse-play/web/4H-shootingGame.jpg" alt="Kids playing at Pixel Pulse" style="width:100%;height:100%;object-fit:cover;border-radius:16px;">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(0,245,196,0.06), transparent 70%);border-radius:16px;"></div>
       </div>
       <div class="why-floating why-floating-1">
         <div class="floating-dot dot-green"></div>
@@ -1013,6 +1139,61 @@ footer {
   </div>
 </div>
 
+<!-- BLOG / NEWS -->
+<section id="blog" style="background:var(--dark);">
+  <div class="section-tag reveal">Latest News</div>
+  <h2 class="reveal">FROM THE<br>PIXEL PULSE BLOG</h2>
+  <p class="section-desc reveal">Tips, guides, and updates from Vaughan's favourite gaming arena.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" class="reveal">
+
+    <a href="https://www.pixelpulseplay.ca/blogs/best-indoor-activities-for-kids-teens-in-vaughan--2026-guide?uid=O8xn6iSlcpTh1ASsWjp7" style="text-decoration:none;color:inherit;" class="blog-card">
+      <div class="blog-img-wrap">
+        <img src="https://storage.googleapis.com/pixel-pulse-play/blog/56953736-ec59-4cc8-a411-e9a510795e80.png" alt="Best Indoor Activities for Kids & Teens in Vaughan">
+      </div>
+      <div class="blog-body">
+        <div class="blog-date">Mar 12, 2026</div>
+        <div class="blog-title">Best Indoor Activities for Kids & Teens in Vaughan — 2026 Guide</div>
+        <div class="blog-read">Read more →</div>
+      </div>
+    </a>
+
+    <a href="https://www.pixelpulseplay.ca/blogs/why-pixel-pulse-playzone-is-the-most-exciting-indoor-playground-in-vaughan?uid=G4aIwO6h3XZVFqGfJOsw" style="text-decoration:none;color:inherit;" class="blog-card">
+      <div class="blog-img-wrap">
+        <img src="https://storage.googleapis.com/pixel-pulse-play/blog/eeb6bd59-b54d-482a-ac12-0962839dfb94.png" alt="Why Pixel Pulse is the Most Exciting Indoor Playground">
+      </div>
+      <div class="blog-body">
+        <div class="blog-date">Mar 12, 2026</div>
+        <div class="blog-title">Why Pixel Pulse Playzone is the Most Exciting Indoor Playground in Vaughan</div>
+        <div class="blog-read">Read more →</div>
+      </div>
+    </a>
+
+    <a href="https://www.pixelpulseplay.ca/blogs/level-up-vaughan-with-gtas-first-interactive-arena?uid=8bESv41YpI29LbAdoy6S" style="text-decoration:none;color:inherit;" class="blog-card">
+      <div class="blog-img-wrap">
+        <img src="https://storage.googleapis.com/pixel-pulse-play/blog/fec2b72a-2771-4950-8b4e-afa663e5fb32.png" alt="Level Up Vaughan with GTA's First Interactive Arena">
+      </div>
+      <div class="blog-body">
+        <div class="blog-date">Mar 12, 2026</div>
+        <div class="blog-title">Level Up Vaughan with GTA's First Interactive Arena</div>
+        <div class="blog-read">Read more →</div>
+      </div>
+    </a>
+
+    <a href="https://www.pixelpulseplay.ca/blogs/best-teen-birthday-party-venue-in-vaughan--2026-guide?uid=EymEerlEVc5SicSp9oau" style="text-decoration:none;color:inherit;" class="blog-card">
+      <div class="blog-img-wrap">
+        <img src="https://storage.googleapis.com/pixel-pulse-play/blog/8a3d8b51-d6c6-45fb-a5fb-ec7acc493e3f.jpg" alt="Best Teen Birthday Party Venue in Vaughan">
+      </div>
+      <div class="blog-body">
+        <div class="blog-date">Mar 12, 2026</div>
+        <div class="blog-title">Best Teen Birthday Party Venue in Vaughan — 2026 Guide</div>
+        <div class="blog-read">Read more →</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
@@ -1078,6 +1259,14 @@ footer {
   const nav = document.querySelector('nav');
   window.addEventListener('scroll', () => {
     nav.style.borderBottomColor = window.scrollY > 40 ? 'rgba(0,245,196,0.1)' : 'rgba(255,255,255,0.07)';
+  });
+
+  // Video mute toggle
+  const video = document.getElementById('heroVideo');
+  const muteBtn = document.getElementById('muteBtn');
+  muteBtn.addEventListener('click', () => {
+    video.muted = !video.muted;
+    muteBtn.textContent = video.muted ? '🔇' : '🔊';
   });
 </script>
 </body>
